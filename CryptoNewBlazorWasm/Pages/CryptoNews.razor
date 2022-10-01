@@ -1,0 +1,57 @@
+﻿@page "/crytonews"
+@using CryptoNewBlazorWasm.Model
+@using CryptoNewBlazorWasm.Services
+@inject INewFetchService NewsFetching
+
+
+<h3>CryptoNews</h3>
+<PageTitle>Cryto News</PageTitle>
+<br />
+<div>
+    @if (News == null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var item in News)
+            {
+                <div class="col-4">
+                    <div class="card">
+                        <img src="@item.ImageUrl" />
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Headline</h5>
+                            <p class="card-body">@item.Body</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    }
+
+</div>
+
+@if (!string.IsNullOrEmpty(Error) )
+{
+    <p>@Error</p>
+}
+
+
+@code {
+    private List<NewsItem> News { get; set; }
+    private string? Error { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {   try
+        {
+            News = await  NewsFetching.GetNews();
+        }
+        catch(Exception e)
+        {
+            Error = e.Message;
+        }
+
+    }
+}
