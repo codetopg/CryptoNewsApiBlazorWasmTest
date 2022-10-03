@@ -23,6 +23,10 @@ jobs:
     - name: Publish .NET Core Project   
       run: dotnet publish CrytoNewsApiBlazorWasmTest.csproj -c Release -o release --nologo  
       
+    # changes the base-tag in index.html from '/' to 'CrytoNewsApiBlazorWasmTest' to match GitHub Pages repository subdirectory
+    - name: Change base-tag in index.html from / to CrytoNewsApiBlazorWasmTest
+      run: sed -i 's/<base href="\/" \/>/<base href="\/CrytoNewsApiBlazorWasmTest\/" \/>/g' release/wwwroot/index.html
+      
     #copy index.html to 404.html incase httpcallrequest return 404
     - name: copy index.html to 404.html
       run: cp release/wwwroot/index.html release/wwwroot/404.html
