@@ -1,0 +1,39 @@
+name: Deploy to GitHub Pages for folder project
+
+# Run workflow on every push to the master branch
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy-to-github-pages:
+    # use ubuntu-latest image to run steps on
+    runs-on: ubuntu-latest
+    steps:
+    
+    # uses GitHub's checkout action to checkout code form the master branch
+    - uses: actions/checkout@v2
+    
+    # sets up .NET Core SDK 6.0.401
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.401
+        
+    #publishes Blazor project to the release-folder
+    - name: Publish .NET Core Project   
+      run: dotnet publish CrytoNewsApiBlazorWasmTest.csproj -c Release -o release --nologo  
+      
+    #copy index.html to 404.html incase httpcallrequest return 404
+    - name: copy index.html to 404.html
+      run: cp release/wwwroot/index.html release/wwwroot/404.html
+      
+    #add .nojekyll file
+    - name: add .nojekyll file
+      run: touch release/wwwroot/.nojeykyll
+      
+    #commit wwwroot to GitHub pages
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.4.0
+      with:        
+        BRANCH: gh-pages
+        FOLDER: release/wwwroot
