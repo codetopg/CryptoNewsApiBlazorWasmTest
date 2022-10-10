@@ -1,11 +1,11 @@
-﻿@page "/crytonews"
+﻿@page "/cryptonews"
 @using CryptoNewBlazorWasm.Model
 @using CryptoNewBlazorWasm.Services
 @inject INewFetchService NewsFetching
 
 
 <h3>CryptoNews</h3>
-<PageTitle>Cryto News</PageTitle>
+<PageTitle>Crypto News</PageTitle>
 <br />
 <div>
     @if (News == null)
@@ -36,6 +36,7 @@
 @if (!string.IsNullOrEmpty(Error) )
 {
     <p>@Error</p>
+    <p>Hi error</p>
 }
 
 

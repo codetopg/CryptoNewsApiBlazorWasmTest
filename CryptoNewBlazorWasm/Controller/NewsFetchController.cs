@@ -1,6 +1,7 @@
 ﻿using CryptoNewBlazorWasm.Model;
 using CryptoNewBlazorWasm.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -14,7 +15,16 @@ namespace CryptoNewBlazorWasm.Controller
         const string _baseUrl = "https://investing-cryptocurrency-markets.p.rapidapi.com";
         const string _newEndPoint = "/coins/get-news?pair_ID=1057391&page=1&time_utc_offset=28800&lang_ID=1";
         const string _host = "investing-cryptocurrency-markets.p.rapidapi.com";
+        string apiKey;
+        //readonly ApiKey secretReader = new SecretReader().ReadSection<ApiKey>("MySecretValues");
         const string _key = "7ddaaf6955msh87bbaee995a77b3p1eddc8jsneb44a4cb5d9c";
+
+        //const string _key = UserSecretsConfigurationExtensions.AddUserSecrets;
+        //private readonly ApiKey _key.;
+        //string apiKey = config["apikey"];
+
+
+
 
         public NewsFetchController(HttpClient httpClient)
         {
@@ -42,11 +52,20 @@ namespace CryptoNewBlazorWasm.Controller
 
         }
 
+        public string GetKey() {
+         var config = new ConfigurationBuilder()
+                    .AddUserSecrets<Program>()                    
+                    .Build();
+             apiKey = config["apikey"];
+            return apiKey;
+        }
+
         private void ConfigureHttpClient()
         {
             _httpClient.BaseAddress = new Uri(_baseUrl);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _key);
+            //_httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _key);
             _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", _host);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _key);
         }
     }
 }
