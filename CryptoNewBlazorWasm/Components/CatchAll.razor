@@ -1,0 +1,10 @@
+﻿@page "/{*path}"
+
+@if (path is not null)
+{
+    <h1>Error path: Can't be found @path</h1>
+}
+
+@code {
+       [Parameter] public string? path { get; set; }
+}
